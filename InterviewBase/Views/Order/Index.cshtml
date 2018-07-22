@@ -1,4 +1,4 @@
-﻿@model List<InterviewBase.Models.Entities.Customer>
+﻿@model List<InterviewBase.Models.Entities.Order>
 
 @{
     ViewBag.Title = "Клиенты";
@@ -13,30 +13,33 @@
         <thead>
             <tr>
                 <th scope="col">Id</th>
-                <th scope="col">Имя</th>
-                <th scope="col">Фамилия</th>
-                <th scope="col">Email</th>
-                <th scope="col"></th>
-                <th scope="col"></th>
+                <th scope="col">Дата</th>
+                <th scope="col">Цена</th>
+                <th scope="col">Количество</th>
+                <th scope="col">Товар</th>
+                <th scope="col">Сотрудник</th>
+                <th scope="col">Клиент</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var customer in Model)
+            @foreach (var order in Model)
             {
-                <tr>
-                    <th scope="row">@customer.Id</th>
-                    <td>@customer.FirstName</td>
-                    <td>@customer.LastName</td>
-                    <td>@customer.Email</td>
-                    <th>@Html.ActionLink("Удалить", "Renove", "Customer", new { idcustomer = customer.Id }, null)</th>
-                    <th>@Html.ActionLink("Изменить", "Update", "Customer", new { idcustomer = customer.Id }, null)</th>
-                </tr>
+            <tr>
+                <th scope="row">@order.Id</th>
+                <td>@order.Date.ToShortDateString()</td>
+                <td>@order.Price</td>
+                <td>@order.Count</td>
+                <td>@order.Product.Name</td>
+                <td>@order.Employee.FirstName @order.Employee.LastName</td>
+                <td>@order.Customer.FirstName @order.Customer.LastName</td>
+
+            </tr>
             }
         </tbody>
     </table>
 </div>
 
-@Html.ActionLink("Добавить", "Add", "Customer")
+@Html.ActionLink("Добавить", "Add", "Order")
 
 <nav aria-label="Page navigation">
     <ul class="pagination">
@@ -45,7 +48,7 @@
                 var prev = ViewBag.Index - 1;
                 prev = prev < 0 ? 0 : prev;
             }
-            <a href="/Customer/Index?index=@prev" aria-label="Previous">
+            <a href="/Order/Index?index=@prev" aria-label="Previous">
                 <span aria-hidden="true">&laquo;</span>
             </a>
         </li>
@@ -59,14 +62,14 @@
         @for (int i = 0; i <= count; i++)
         {
             var index = i + 1;
-            <li><a href="/Customer/Index?index=@i">@index</a></li>
+            <li><a href="/Order/Index?index=@i">@index</a></li>
         }
         <li>
             @{
                 var next = ViewBag.Index + 1;
                 next = next > count ? count : next;
             }
-            <a href="/Customer/Index?index=@next" aria-label="Next">
+            <a href="/Order/Index?index=@next" aria-label="Next">
                 <span aria-hidden="true">&raquo;</span>
             </a>
         </li>

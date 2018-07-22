@@ -43,6 +43,9 @@ namespace InterviewBase.Services.Infastructure.DbService
             return customers;
         }
 
+        public async Task<List<Customer>> Get()
+            => await _context.Customers.ToListAsync();
+
         public async Task<Customer> GetById(int id)
             => await _context.Customers
                     .Include(c => c.Orders)

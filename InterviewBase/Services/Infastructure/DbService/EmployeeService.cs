@@ -35,6 +35,7 @@ namespace InterviewBase.Services.Infastructure.DbService
         public async Task<List<Employee>> Get(int count, int offset)
         {
             var employees = await _context.Employees
+                .OrderBy(e => e.Id)
                 .Skip(offset)
                 .Take(count)
                 .ToListAsync();
@@ -42,10 +43,17 @@ namespace InterviewBase.Services.Infastructure.DbService
             return employees;
         }
 
+        public async Task<List<Employee>> Get()
+            => await _context.Employees.ToListAsync();
+
+
         public async Task<Employee> GetById(int id)
             => await _context.Employees
                     .Include(e => e.Orders)
                     .FirstOrDefaultAsync(e => e.Id == id);
+
+        public async Task<int> GetCount()
+            => await _context.Employees.CountAsync();
 
         public async Task<bool> Remove(int id)
         {

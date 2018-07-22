@@ -10,23 +10,21 @@ using System.Web.Mvc;
 
 namespace InterviewBase.Controllers
 {
-    public class CustomerController : Controller
+    public class ProductTypeController : Controller
     {
-        private readonly ICustomerService _customerService;
+        private readonly IProductTypeService _productTypeService;
 
-        public CustomerController(ICustomerService customerService)
+        public ProductTypeController(IProductTypeService productTypeService)
         {
-            _customerService = customerService;
+            _productTypeService = productTypeService;
         }
 
         [HttpGet]
         public async Task<ActionResult> Index(int index = 0)
         {
-            var customers = await _customerService.Get(10, index * 10);
-            ViewBag.Index = index;
-            ViewBag.Count = await _customerService.GetCount();
+            var productTypes = await _productTypeService.Get();
 
-            return View(customers);
+            return View(productTypes);
         }
 
         [HttpGet]
@@ -42,7 +40,7 @@ namespace InterviewBase.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Add(Customer customer)
+        public async Task<ActionResult> Add(ProductType productType)
         {
             if (!ModelState.IsValid)
             {
@@ -50,20 +48,20 @@ namespace InterviewBase.Controllers
                 return RedirectToAction("Add", new { errors = value });
             }
 
-            await _customerService.Add(customer);
+            await _productTypeService.Add(productType);
             return RedirectToAction("Index");
         }
 
         [HttpGet]
-        public ActionResult Renove(int idcustomer)
+        public ActionResult Renove(int idpt)
         {
-            _customerService.Remove(idcustomer);
+            _productTypeService.Remove(idpt);
             return RedirectToAction("Index");
         }
 
 
         [HttpGet]
-        public async Task<ActionResult> Update(int idcustomer, string errors = "")
+        public async Task<ActionResult> Update(int idpt, string errors = "")
         {
             var listError = new List<string>();
             if (!string.IsNullOrWhiteSpace(errors))
@@ -71,22 +69,22 @@ namespace InterviewBase.Controllers
                 listError = errors.Split('.').ToList();
             }
 
-            var customer = await _customerService.GetById(idcustomer);
+            var productType = await _productTypeService.GetById(idpt);
 
             ViewBag.Errors = listError;
-            return View(customer);
+            return View(productType);
         }
 
         [HttpPost]
-        public async Task<ActionResult> Update(Customer customer)
+        public async Task<ActionResult> Update(ProductType productType)
         {
             if (!ModelState.IsValid)
             {
                 var value = ModelState.Values.GetParams();
-                return RedirectToAction("Update", new { idcustomer = customer.Id, errors = value });
+                return RedirectToAction("Update", new { idpt = productType.Id, errors = value });
             }
 
-            await _customerService.Update(customer);
+            await _productTypeService.Update(productType);
             return RedirectToAction("Index");
         }
     }

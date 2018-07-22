@@ -20,6 +20,8 @@ namespace InterviewBase.Services.Infastructure.DbService
 
         public async Task Add(Order order)
         {
+            var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == order.ProductId);
+            order.Price = order.Count * product.Price;
             _context.Orders.Add(order);
 
             try
@@ -35,9 +37,13 @@ namespace InterviewBase.Services.Infastructure.DbService
         public async Task<List<Order>> Get(int count, int offset)
         {
             var orders = await _context.Orders
-                .Skip(offset)
-                .Take(count)
-                .ToListAsync();
+                .Include(o => o.Customer)
+                .Include(o => o.Employee)
+                .Include(o => o.Product)
+                    .OrderBy(o => o.Id)
+                    .Skip(offset)
+                    .Take(count)
+                    .ToListAsync();
 
             return orders;
         }
@@ -57,7 +63,7 @@ namespace InterviewBase.Services.Infastructure.DbService
                 .Include(o => o.Customer)
                 .Include(o => o.Employee)
                 .Include(o => o.Product)
-                .FirstOrDefaultAsync(o => o.Id == id);
+                    .FirstOrDefaultAsync(o => o.Id == id);
 
             return order;
         }
@@ -72,5 +78,8 @@ namespace InterviewBase.Services.Infastructure.DbService
 
             return orders;
         }
+
+        public async Task<int> GetCount()
+            => await _context.Orders.CountAsync();
     }
 }

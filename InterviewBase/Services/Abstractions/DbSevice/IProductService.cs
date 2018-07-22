@@ -15,5 +15,9 @@ namespace InterviewBase.Services.Abstractions.DbSevice
         Task<bool> Remove(int id);
 
         Task<Product> Update(Product newValue);
+
+        Task<int> GetCount();
+
+        Task<List<Product>> Get();
     }
 }

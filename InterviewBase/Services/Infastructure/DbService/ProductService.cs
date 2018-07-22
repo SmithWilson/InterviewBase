@@ -35,6 +35,8 @@ namespace InterviewBase.Services.Infastructure.DbService
         public async Task<List<Product>> Get(int count, int offset)
         {
             var products = await _context.Products
+                .Include(p => p.Type)
+                .OrderBy(p => p.Id)
                 .Skip(offset)
                 .Take(count)
                 .ToListAsync();
@@ -42,10 +44,16 @@ namespace InterviewBase.Services.Infastructure.DbService
             return products;
         }
 
+        public async Task<List<Product>> Get()
+            => await _context.Products.ToListAsync();
+
         public async Task<Product> GetById(int id)
             =>  await _context.Products
                     .Include(p => p.Orders)
                     .FirstOrDefaultAsync(p => p.Id == id);
+
+        public async Task<int> GetCount()
+            => await _context.Products.CountAsync();
 
         public async Task<bool> Remove(int id)
         {

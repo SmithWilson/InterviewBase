@@ -10,23 +10,23 @@ using System.Web.Mvc;
 
 namespace InterviewBase.Controllers
 {
-    public class CustomerController : Controller
+    public class EmployeeController : Controller
     {
-        private readonly ICustomerService _customerService;
+        private readonly IEmployeeService _employeeService;
 
-        public CustomerController(ICustomerService customerService)
+        public EmployeeController(IEmployeeService employeeService)
         {
-            _customerService = customerService;
+            _employeeService = employeeService;
         }
 
         [HttpGet]
         public async Task<ActionResult> Index(int index = 0)
         {
-            var customers = await _customerService.Get(10, index * 10);
+            var employees = await _employeeService.Get(10, index * 10);
             ViewBag.Index = index;
-            ViewBag.Count = await _customerService.GetCount();
+            ViewBag.Count = await _employeeService.GetCount();
 
-            return View(customers);
+            return View(employees);
         }
 
         [HttpGet]
@@ -42,7 +42,7 @@ namespace InterviewBase.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Add(Customer customer)
+        public async Task<ActionResult> Add(Employee employee)
         {
             if (!ModelState.IsValid)
             {
@@ -50,20 +50,20 @@ namespace InterviewBase.Controllers
                 return RedirectToAction("Add", new { errors = value });
             }
 
-            await _customerService.Add(customer);
-            return RedirectToAction("Index");
+            await _employeeService.Add(employee);
+            return RedirectToAction("Index", "Employee");
         }
 
         [HttpGet]
-        public ActionResult Renove(int idcustomer)
+        public ActionResult Renove(int idemployee)
         {
-            _customerService.Remove(idcustomer);
-            return RedirectToAction("Index");
+            _employeeService.Remove(idemployee);
+            return RedirectToAction("Index", "Employee");
         }
 
 
         [HttpGet]
-        public async Task<ActionResult> Update(int idcustomer, string errors = "")
+        public async Task<ActionResult> Update(int idemployee, string errors = "")
         {
             var listError = new List<string>();
             if (!string.IsNullOrWhiteSpace(errors))
@@ -71,23 +71,23 @@ namespace InterviewBase.Controllers
                 listError = errors.Split('.').ToList();
             }
 
-            var customer = await _customerService.GetById(idcustomer);
+            var employee = await _employeeService.GetById(idemployee);
 
             ViewBag.Errors = listError;
-            return View(customer);
+            return View(employee);
         }
 
         [HttpPost]
-        public async Task<ActionResult> Update(Customer customer)
+        public async Task<ActionResult> Update(Employee employee)
         {
             if (!ModelState.IsValid)
             {
                 var value = ModelState.Values.GetParams();
-                return RedirectToAction("Update", new { idcustomer = customer.Id, errors = value });
+                return RedirectToAction("Update", new { idemployee = employee.Id, errors = value });
             }
 
-            await _customerService.Update(customer);
-            return RedirectToAction("Index");
+            await _employeeService.Update(employee);
+            return RedirectToAction("Index", "Employee");
         }
     }
 }

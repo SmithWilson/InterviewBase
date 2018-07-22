@@ -17,5 +17,7 @@ namespace InterviewBase.Services.Abstractions.DbSevice
         Task<Customer> Update(Customer newValue);
 
         Task<int> GetCount();
+
+        Task<List<Customer>> Get();
     }
 }

@@ -16,5 +16,6 @@ namespace InterviewBase.Services.Abstractions.DbSevice
 
         Task Add(Order order);
 
+        Task<int> GetCount();
     }
 }

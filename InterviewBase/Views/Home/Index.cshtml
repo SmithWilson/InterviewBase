@@ -3,9 +3,9 @@
 }
 
 <ul class="nav nav-pills nav-stacked" style="margin-top:20px;">
-    <li role="presentation" class="active"><a href="#">Заказы</a></li>
+    <li role="presentation" class="active">@Html.ActionLink("Заказы", "Index", "Order")</li>
     <li role="presentation">@Html.ActionLink("Клиенты", "Index", "Customer")</li>
-    <li role="presentation"><a href="#">Сотрудники</a></li>
-    <li role="presentation"><a href="#">Товары</a></li>
-    <li role="presentation"><a href="#">Типы товара</a></li>
+    <li role="presentation">@Html.ActionLink("Сотрудники", "Index", "Employee")</li>
+    <li role="presentation">@Html.ActionLink("Товары", "Index", "Product")</li>
+    <li role="presentation">@Html.ActionLink("Типы товара", "Index", "ProductType")</li>
 </ul>

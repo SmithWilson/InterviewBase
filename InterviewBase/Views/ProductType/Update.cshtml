@@ -1,0 +1,18 @@
+﻿@model InterviewBase.Models.Entities.ProductType
+@{
+    ViewBag.Title = "Редактирование";
+}
+
+@for (int i = 0; i < ViewBag.Errors.Count - 1; i++)
+{
+    <div class="alert alert-danger" role="alert" style="margin-top:20px;">@ViewBag.Errors[i]</div>
+}
+
+<form class="navbar-form navbar-left" role="search" style="width:100%;" method="post" action="/ProductType/Update">
+    <div class="form-group" style="display:flex;flex-flow:column nowrap;">
+        <input type="text" class="form-control" placeholder="Имя" value="@Model.Name" style="margin:10px 0;" name="Name">
+        <input type="hidden" value="@Model.Id" name="Id" />
+    </div>
+    <button type="submit" class="btn btn-default" style="margin:10px 0;">Применить</button>
+</form>
+

@@ -1,24 +1,11 @@
-﻿using System;
+﻿using DataAnnotationsExtensions;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace InterviewBase.Models.Entities
 {
     public class Order
     {
-        public Order(Product p, Customer c, Employee e, int count = 1)
-        {
-            if (count <= 0)
-            {
-                throw new ArgumentException(nameof(count));
-            }
-
-            Product = p ?? throw new ArgumentNullException(nameof(p));
-            Customer = c ?? throw new ArgumentNullException(nameof(c));
-            Employee = e ?? throw new ArgumentNullException(nameof(e));
-            Count = count;
-            Price = Count * Product.Price;
-        }
-
         public Order()
         {
 
@@ -29,9 +16,10 @@ namespace InterviewBase.Models.Entities
         public DateTime Date { get; private set; } = DateTime.Now;
 
         [Required]
+        [Min(1)]
         public int Count { get; set; }
         
-        public float Price { get; private set; }
+        public float Price { get; set; }
 
         [Required]
         public int? EmployeeId { get; set; }

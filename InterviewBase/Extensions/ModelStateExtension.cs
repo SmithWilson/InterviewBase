@@ -13,7 +13,12 @@ namespace InterviewBase.Extensions
             var errors = string.Empty;
             foreach (var item in states)
             {
-                errors = $"{errors} {item.Errors[0].ErrorMessage}";
+                if (item.Errors.Count != 0)
+                {
+                    errors = $"{errors} {item.Errors[0].ErrorMessage}";
+                }
+
+                continue;
             }
 
             return errors;

@@ -10,27 +10,38 @@ using System.Web.Mvc;
 
 namespace InterviewBase.Controllers
 {
-    public class CustomerController : Controller
+    public class OrderController : Controller
     {
+        private readonly IOrderService _orderService;
         private readonly ICustomerService _customerService;
+        private readonly IProductService _productService;
+        private readonly IEmployeeService _employeeService;
 
-        public CustomerController(ICustomerService customerService)
+        public OrderController(
+            IOrderService orderService,
+            ICustomerService customerService,
+            IProductService productService,
+            IEmployeeService employeeService)
         {
+            _orderService = orderService;
             _customerService = customerService;
+            _productService = productService;
+            _employeeService = employeeService;
         }
+
 
         [HttpGet]
         public async Task<ActionResult> Index(int index = 0)
         {
-            var customers = await _customerService.Get(10, index * 10);
+            var orders = await _orderService.Get(10, index * 10);
             ViewBag.Index = index;
-            ViewBag.Count = await _customerService.GetCount();
+            ViewBag.Count = await _orderService.GetCount();
 
-            return View(customers);
+            return View(orders);
         }
 
         [HttpGet]
-        public ActionResult Add(string errors)
+        public async Task<ActionResult> Add(string errors)
         {
             var listError = new List<string>();
             if (!string.IsNullOrWhiteSpace(errors))
@@ -38,11 +49,14 @@ namespace InterviewBase.Controllers
                 listError = errors.Split('.').ToList();
             }
 
+            ViewBag.Customers = await _customerService.Get();
+            ViewBag.Products = await  _productService.Get();
+            ViewBag.Employees = await _employeeService.Get();
             return View("Add", listError);
         }
 
         [HttpPost]
-        public async Task<ActionResult> Add(Customer customer)
+        public async Task<ActionResult> Add(Order order)
         {
             if (!ModelState.IsValid)
             {
@@ -50,20 +64,12 @@ namespace InterviewBase.Controllers
                 return RedirectToAction("Add", new { errors = value });
             }
 
-            await _customerService.Add(customer);
+            await _orderService.Add(order);
             return RedirectToAction("Index");
         }
-
+        
         [HttpGet]
-        public ActionResult Renove(int idcustomer)
-        {
-            _customerService.Remove(idcustomer);
-            return RedirectToAction("Index");
-        }
-
-
-        [HttpGet]
-        public async Task<ActionResult> Update(int idcustomer, string errors = "")
+        public async Task<ActionResult> Update(int idOrder, string errors = "")
         {
             var listError = new List<string>();
             if (!string.IsNullOrWhiteSpace(errors))
@@ -71,23 +77,10 @@ namespace InterviewBase.Controllers
                 listError = errors.Split('.').ToList();
             }
 
-            var customer = await _customerService.GetById(idcustomer);
+            var order = await _orderService.GetById(idOrder);
 
             ViewBag.Errors = listError;
-            return View(customer);
-        }
-
-        [HttpPost]
-        public async Task<ActionResult> Update(Customer customer)
-        {
-            if (!ModelState.IsValid)
-            {
-                var value = ModelState.Values.GetParams();
-                return RedirectToAction("Update", new { idcustomer = customer.Id, errors = value });
-            }
-
-            await _customerService.Update(customer);
-            return RedirectToAction("Index");
+            return View(order);
         }
     }
 }

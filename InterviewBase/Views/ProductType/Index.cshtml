@@ -1,0 +1,35 @@
+﻿@model List<InterviewBase.Models.Entities.ProductType>
+
+@{
+    ViewBag.Title = "Типы товара";
+}
+
+<div class="panel panel-default" style="margin-top:20px;">
+    <!-- Default panel contents -->
+    <div class="panel-heading">Клиенты</div>
+
+    <!-- Table -->
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Название</th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var ProductType in Model)
+            {
+                <tr>
+                    <th scope="row">@ProductType.Id</th>
+                    <td>@ProductType.Name</td>
+                    <th>@Html.ActionLink("Удалить", "Renove", "ProductType", new { idpt = ProductType.Id }, null)</th>
+                    <th>@Html.ActionLink("Изменить", "Update", "ProductType", new { idpt = ProductType.Id }, null)</th>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@Html.ActionLink("Добавить", "Add", "ProductType")

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using DataAnnotationsExtensions;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace InterviewBase.Models.Entities
@@ -16,6 +17,7 @@ namespace InterviewBase.Models.Entities
         public string Name { get; set; }
 
         [Required]
+        [Min(1)]
         public float Price { get; set; }
 
         [Required]
