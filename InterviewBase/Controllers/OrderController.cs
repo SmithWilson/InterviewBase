@@ -67,20 +67,5 @@ namespace InterviewBase.Controllers
             await _orderService.Add(order);
             return RedirectToAction("Index");
         }
-        
-        [HttpGet]
-        public async Task<ActionResult> Update(int idOrder, string errors = "")
-        {
-            var listError = new List<string>();
-            if (!string.IsNullOrWhiteSpace(errors))
-            {
-                listError = errors.Split('.').ToList();
-            }
-
-            var order = await _orderService.GetById(idOrder);
-
-            ViewBag.Errors = listError;
-            return View(order);
-        }
     }
 }
