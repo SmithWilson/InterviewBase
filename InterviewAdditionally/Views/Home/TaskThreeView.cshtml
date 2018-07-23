@@ -1,0 +1,74 @@
+﻿
+@{
+    ViewBag.Title = "Задание 3";
+}
+
+<h2>Задание 3 Усложняем строки</h2>
+
+<table cellpadding="0" cellspacing="0" border="0" class="stripe hover cell-border order-column" id="example">
+    <thead>
+        <tr>
+            <th>FirstName</th>
+            <th>LastName</th>
+            <th>MiddleName</th>
+            <th>BirthDate</th>
+            <th>Car</th>
+        </tr>
+    </thead>
+</table>
+
+<script>
+    $.ajax({
+
+        type: "GET",
+        url: 'http://localhost:60290/Home/TaskThree',
+        dataType: 'json',
+
+        success: function (obj, textstatus) {
+            console.log(obj);
+            var dataSet = new Array;
+            if (!('error' in obj)) {
+                $.each(obj, function (index, value) {
+                    var tempArray = new Array;
+                    for (var o in value) {
+                        tempArray.push(value[o]);
+                    }
+                    dataSet.push(tempArray);
+                })
+
+                console.log(dataSet);
+
+                var table = $('#example').DataTable({
+                    "paging": false,
+                    "ordering": false,
+                    "info": false
+                });
+                
+                console.log(dataSet);
+                for (var i = 0; i < dataSet.length; i++) {
+                    
+                    table.row.add([
+                       dataSet[i][0],
+                       dataSet[i][1],
+                       dataSet[i][2],
+                       dataSet[i][3],
+                       dataSet[i][4]
+                    ]).draw();
+                    table.row.add([
+                        "",
+                        "",
+                        "",
+                        "",
+                        dataSet[i][5]
+                    ]).draw();
+                }
+            }
+            else {
+                alert(obj.error);
+            }
+        },
+        error: function (obj, textstatus) {
+            alert(obj.msg);
+        }
+    });
+</script>

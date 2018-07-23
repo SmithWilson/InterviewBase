@@ -4,6 +4,7 @@ using InterviewBase.Services.Abstractions.DbSevice;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace InterviewBase.Services.Infastructure.DbService
@@ -32,7 +33,9 @@ namespace InterviewBase.Services.Infastructure.DbService
         }
 
         public async Task<List<ProductType>> Get()
-            => await _context.ProductTypes.ToListAsync();
+            => await _context.ProductTypes
+                    .OrderBy(pt => pt.Id)
+                    .ToListAsync();
 
         public async Task<ProductType> GetById(int id)
             => await _context.ProductTypes

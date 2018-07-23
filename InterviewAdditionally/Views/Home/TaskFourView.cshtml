@@ -1,0 +1,52 @@
+﻿
+@{
+    ViewBag.Title = "Задание 4";
+}
+
+<h2>Задание 4 Усложняем объект</h2>
+
+<table cellpadding="0" cellspacing="0" border="0" class="stripe hover cell-border order-column" id="example">
+    <thead>
+        <tr>
+            <th>Имя</th>
+            <th>Фамилия</th>
+            <th>Отчество</th>
+            <th>Дата рождения</th>
+            <th>Машина</th>
+        </tr>
+    </thead>
+</table>
+
+<script>
+
+    var client = new XMLHttpRequest();
+    client.open('GET', 'http://localhost:60290/Home/TaskFour', false);
+    client.send();
+    var response = client.responseText;
+
+    var jsonObj = jQuery.parseJSON(response);
+    jsonObj = jQuery.parseJSON(jsonObj);
+
+    var table = $('#example').DataTable({
+        "paging": false,
+        "ordering": false,
+        "info": false
+    });
+
+    for (var i = 0; i < jsonObj.length; i++) {
+        table.row.add([
+            jsonObj[i].Fio.FirstName,
+            jsonObj[i].Fio.LastName,
+            jsonObj[i].Fio.MiddleName,
+            jsonObj[i].BirthDate,
+            jsonObj[i].Car.CarName
+        ]).draw();
+        table.row.add([
+            "",
+            "",
+            "",
+            "",
+            jsonObj[i].Car.CarNumber
+        ]).draw();
+    }
+</script>

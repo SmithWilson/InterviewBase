@@ -1,0 +1,67 @@
+﻿
+@{
+    ViewBag.Title = "Задание 2";
+}
+
+<h2>Задание 2 Усложняем шапку</h2>
+
+<table cellpadding="0" cellspacing="0" border="0" class="display" id="example">
+    <thead>
+        <tr>
+            <th colspan="3" style="text-align:center;">ФИО</th>
+            <th colspan="1">Дата рождения</th>
+            <th colspan="2" style="text-align:center;">Машина</th>
+        </tr>
+        <tr>
+            <th>FirstName</th>
+            <th>LastName</th>
+            <th>MiddleName</th>
+            <th>BirthDate</th>
+            <th>CarName</th>
+            <th>CarNumber</th>
+        </tr>
+    </thead>
+</table>
+
+<script>
+    $.ajax({
+
+        type: "GET",
+        url: 'http://localhost:60290/Home/TaskTwo',
+        dataType: 'json',
+
+        success: function (obj, textstatus) {
+            console.log(obj);
+            var dataSet = new Array;
+            if (!('error' in obj)) {
+                $.each(obj, function (index, value) {
+                    var tempArray = new Array;
+                    for (var o in value) {
+                        tempArray.push(value[o]);
+                    }
+                    dataSet.push(tempArray);
+                })
+
+                console.log(dataSet);
+
+                $('#example').DataTable({
+                    data: dataSet,
+                    columns: [
+                        { "title": "Имя" },
+                        { "title": "Фамилия" },
+                        { "title": "Отчество" },
+                        { "title": "" },
+                        { "title": "Марка" },
+                        { "title": "Номер" }
+                    ]
+                });
+            }
+            else {
+                alert(obj.error);
+            }
+        },
+        error: function (obj, textstatus) {
+            alert(obj.msg);
+        }
+    });
+</script>
